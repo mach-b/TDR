@@ -45,12 +45,6 @@ public class EntityHitbox {
         this.entityY = entityY;
         // Get bounding Dimension, the larger value, width or height.
         // Rectangle MUST fit within these bounds!!!
-        // FIX !!!!!!!!!!!!!!!!!!!!!!! must be value of diagonal! root(a^2 + b^2)
-//        if (entityHeight > entityWidth) {
-//            boundingDimension = entityHeight;
-//        } else {
-//            boundingDimension = entityWidth;
-//        }
         boundingDimension = (int) Math.ceil(Math.sqrt((entityHeight*entityHeight) + (entityWidth*entityWidth)));
         currentRotationRadians = 0;
             this.rectangle = rectangle;  // Not Really needed, REFACTOR WHEN WORKING.
@@ -61,10 +55,8 @@ public class EntityHitbox {
         // Translate rectangleOrigin to context of EntityHitbox (previously relative to Entity)
         this.rectangleOrigin.setLocation(-xOffset + rectangleOrigin.getX(),
                 -yOffset + rectangleOrigin.getY());
-        // Translate rotationPoint to context of EntityHitbox (previously relative to Entity)
-        this.rectangleOrigin.setLocation(-xOffset + rectangleOrigin.getX(),
-                -yOffset + rectangleOrigin.getY());
         this.rotationPoint = rotationPoint;
+        this.rotationPoint.setLocation(rotationPoint.getX()+(-xOffset), rotationPoint.getY()+(-yOffset));
         // Create Line Segments, actual collision area bounds. (CARE makes assumtions about Rectangle, e.g. not rotated)
         this.frontLine = new Line2D.Double(rectangleOrigin,
                 new Point2D.Double(rectangle.width + rectangleOrigin.getX(), rectangleOrigin.getY()));
@@ -79,6 +71,7 @@ public class EntityHitbox {
                 rectangleOrigin);
         // Set up workingLineArray
         workingLineArray = new Line2D.Double[4];
+        setWorkingLinesRotation(currentRotationRadians);
         numIntersections = 0;  // Hope this is correct, try and handle anyway if not. REFACTOR???
         intersectionPoints = new ArrayList<>();
     }
@@ -110,8 +103,11 @@ public class EntityHitbox {
      * @param y 
      */
     public void alignWithMap(int x, int y) {
+        entityX = x;
+        entityY = y;
         xPos = x + xOffset;
         yPos = y + yOffset;
+        
     }
     
     // Code modified from online source, author not known,

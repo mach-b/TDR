@@ -1,6 +1,7 @@
 package topdownracer;
 
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,9 +38,9 @@ public class Game
     // Ex003.5: Add an explosion container field.
     //private ArrayList<Explosion> explosionContainer;
     
-    private Vehicle playerVehicle;
-    private Vehicle2 testVehicleA, testVehicleB;
-    private ArrayList<Vehicle> opponentContainer;
+//    private VehicleVeryBadATM playerVehicle;
+    private Vehicle testVehicleA, testVehicleB, playerVehicle;
+    private ArrayList<VehicleVeryBadATM> opponentContainer;
     private Track track;
     
     // Back particle emitter
@@ -71,32 +72,22 @@ public class Game
         m_backBuffer = new BackBuffer();
         m_spriteStore = new SpriteStore();
         m_backBuffer.initialise(1000, 700); // Frame width, height.
+        //camera = new Camera(5000, 5000, new Point2D.Double(1000, 1000));
+        //camera.initialise(1000, 700);
 
-        // Ex003.2: Load the player ship sprite. 
-        //Sprite playerShipSprite = new Sprite("assets/playership.png");
-        // Ex003.2: Create the player ship instance.
-        //playerShip = new PlayerShip(playerShipSprite, 400, 500);
+
         keyInputHandler = new KeyInputHandler();
         vCalc = new VectorCalculator();
-        // Ex003.3: Create empty enemy alien container.
-        //enemyContainer = new Enemy[14][4];
-        //enemyContainer = new ArrayList<>();
-        // Ex003.4: Create empty bullet container.
-        //bulletContainer = new ArrayList<>();
-        // Ex003.5: Create empty explosion container.
-        //explosionContainer = new ArrayList<>();
-        // Ex003.3: Spawn four rows of 14 alien enemies.
+
         
         m_drawDebugInfo = true;
         // Create player vehicle
-        playerVehicle = new Vehicle(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400);
-        testVehicleA = new Vehicle2(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400,
-            new Rectangle(20, 20, 50, 100));
-        testVehicleA = new Vehicle2(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400,
-            new Rectangle(20, 20, 50, 100));
+//        playerVehicle = new VehicleVeryBadATM(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400);
+          playerVehicle = new Vehicle(m_spriteStore.getSprite("assets/BMW_55x114.png"), 300, 400);
+//        testVehicleA = new Vehicle(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400);
         
         // Create track
-        track = new Track(m_spriteStore.getSprite("assets/Road_1000x700.png"), 0, 0);
+        track = new Track(m_spriteStore.getSprite("assets/LoopTrack.jpg"), 0, 0);
         
         
         //populateEnemyContainer();
@@ -147,6 +138,7 @@ public class Game
         }
         if(deltaTime > 0) {
             playerVehicle.process(deltaTime);
+            
         }
        
     }
@@ -154,10 +146,11 @@ public class Game
     public void draw()
     {
         ++m_frameCount;
-
+        
         // Prepare to draw a new frame:
         m_backBuffer.clear();
-       
+        //m_backBuffer.camera.shiftCamera(playerVehicle, m_backBuffer);
+        //camera.clear();
         drawTrack();
         drawPlayerVehicle();
         
@@ -166,10 +159,16 @@ public class Game
         {
             m_backBuffer.drawText(10, 30, "FPS: " + String.valueOf(m_FPS));
             m_backBuffer.drawText(10, 45, "Rotation: " +Math.toDegrees(playerVehicle.m_rotationAngle)+" degrees");
-            m_backBuffer.drawText(10, 60, "Velocity: " + playerVehicle.velocity);
-            m_backBuffer.drawText(10, 75, "Acceleration: " + playerVehicle.accel);
+            m_backBuffer.drawText(10, 60, "Velocity: " + playerVehicle.speed);
+            m_backBuffer.drawText(10, 75, "Acceleration: " + playerVehicle.acceleration);
             m_backBuffer.drawText(10, 90, "X Position: " + playerVehicle.m_positionX);
             m_backBuffer.drawText(10, 105, "Y Position: " + playerVehicle.m_positionY);
+//            camera.drawText(10, 30, "FPS: " + String.valueOf(m_FPS));
+//            camera.drawText(10, 45, "Rotation: " +Math.toDegrees(playerVehicle.m_rotationAngle)+" degrees");
+//            camera.drawText(10, 60, "Velocity: " + playerVehicle.speed);
+//            camera.drawText(10, 75, "Acceleration: " + playerVehicle.acceleration);
+//            camera.drawText(10, 90, "X Position: " + playerVehicle.m_positionX);
+//            camera.drawText(10, 105, "Y Position: " + playerVehicle.m_positionY);
         }
         // Flip frame buffers:
         m_backBuffer.present();

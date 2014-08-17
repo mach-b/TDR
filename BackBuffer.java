@@ -20,8 +20,9 @@ public class BackBuffer
         
     private BufferStrategy m_strategy;
     private Canvas m_canvas;
-    private Graphics2D m_graphics;
+    protected Graphics2D m_graphics;
     private AffineTransform transformer;
+    protected Camera camera;
     
     public BackBuffer()
     {
@@ -42,9 +43,11 @@ public class BackBuffer
         
         m_windowWidth = width;
         m_windowHeight = height;
+        camera = new Camera();
         
         createWindow();
         
+        camera = new Camera(0, 0);
         // TODO: Log State Change: "Backbuffer Initialised"
     }
         
@@ -79,19 +82,10 @@ public class BackBuffer
     }
     
     public void drawRotatedImage(int x, int y, Image i, float angle, Point point) {
-        //ROTATION???
-//    Graphics2D g2d = ...
-//AffineTransform backup = g2d.getTransform();
-//AffineTransform trans = new AffineTransform();
-//trans.rotate( sprite.angle, sprite.x, sprite.y ); // the points to rotate around (the center in my example, your left side for your problem)
-//
-//g2d.transformer( trans );
-//g2d.drawImage( image, sprite.x, sprite.y );  // the actual location of the sprite
-//
-//g2d.setTransform( backup );
-        
+
+        System.out.println("rotImage x="+x+", y="+y);
         transformer = new AffineTransform();
-        transformer.rotate(angle, point.getX(), point.getY()); //Math.toRadians(angle)
+        transformer.rotate(angle, point.getX(), point.getY());
         m_graphics.transform(transformer);
         m_graphics.drawImage(i, x, y, m_canvas); //
         m_graphics.setColor(Color.red);
@@ -136,11 +130,36 @@ public class BackBuffer
     }
 
     void draw(Line2D.Double[] workingLineArray) {
+        m_graphics.setColor(Color.red);
         for(Line2D line : workingLineArray) {
             m_graphics.drawLine((int)line.getX1(), (int)line.getY1(),
                     (int)line.getX2(), (int)line.getY2());
+            m_graphics.setColor(Color.blue);
         }
     }
 
+    void draw(EntityHitbox entityHitbox) {
+        m_graphics.setColor(Color.PINK);
+        m_graphics.drawRect(entityHitbox.entityX, entityHitbox.entityY, 5, 5);
+        m_graphics.setColor(Color.red);
+        for(Line2D line : entityHitbox.workingLineArray) {
+            m_graphics.drawLine((int)(line.getX1()+entityHitbox.xPos), (int)(line.getY1()+entityHitbox.yPos),
+                    (int)(line.getX2()+entityHitbox.xPos), (int)(line.getY2()+entityHitbox.yPos));
+            m_graphics.setColor(Color.blue);
+            System.out.println("Line point x="+(line.getX1()+entityHitbox.xPos)+", y"+(line.getY1()+entityHitbox.yPos));
+        }
+    }
+
+    
+        //ROTATION???
+//      Graphics2D g2d = ...
+//      AffineTransform backup = g2d.getTransform();
+//      AffineTransform trans = new AffineTransform();
+//      trans.rotate( sprite.angle, sprite.x, sprite.y ); // the points to rotate around (the center in my example, your left side for your problem)
+//
+//      g2d.transformer( trans );
+//      g2d.drawImage( image, sprite.x, sprite.y );  // the actual location of the sprite
+//
+//      g2d.setTransform( backup );
 
 }
