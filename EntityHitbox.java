@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import javax.vecmath.Vector2d;
 
 /**
@@ -24,7 +25,7 @@ import javax.vecmath.Vector2d;
 public class EntityHitbox {
 
     protected Graphics2D g2d;
-    protected int xOffset, yOffset, entityX, entityY, boundingDimension;  // Bounds are Square
+    protected int xPos, yPos, xOffset, yOffset, entityX, entityY, boundingDimension;  // Bounds are Square
     // Line2D : Line segments to represent the bounds of the Entity as a rectangle.
     // Update Lines based on position and rotation of Vehicle/Entity
     protected final Line2D.Double frontLine, rightLine, backLine, leftLine;
@@ -34,6 +35,7 @@ public class EntityHitbox {
     protected Rectangle rectangle;
     protected double currentRotationRadians;
     protected int numIntersections;
+    protected ArrayList<Point2D> intersectionPoints;
     //protected AffineTransform transformer;
 
     public EntityHitbox(int entityyX, int entityY, int entityWidth, int entityHeight,
@@ -44,13 +46,14 @@ public class EntityHitbox {
         // Get bounding Dimension, the larger value, width or height.
         // Rectangle MUST fit within these bounds!!!
         // FIX !!!!!!!!!!!!!!!!!!!!!!! must be value of diagonal! root(a^2 + b^2)
-        if (entityHeight > entityWidth) {
-            boundingDimension = entityHeight;
-        } else {
-            boundingDimension = entityWidth;
-        }
+//        if (entityHeight > entityWidth) {
+//            boundingDimension = entityHeight;
+//        } else {
+//            boundingDimension = entityWidth;
+//        }
+        boundingDimension = (int) Math.ceil(Math.sqrt((entityHeight*entityHeight) + (entityWidth*entityWidth)));
         currentRotationRadians = 0;
-        this.rectangle = rectangle;  // Not Really needed, REFACTOR WHEN WORKING.
+            this.rectangle = rectangle;  // Not Really needed, REFACTOR WHEN WORKING.
         // The EntityHitbox game coordinates relative to the Entity
         this.xOffset = -((boundingDimension - entityWidth) / 2);
         this.yOffset = -((boundingDimension - entityHeight) / 2);
@@ -77,9 +80,18 @@ public class EntityHitbox {
         // Set up workingLineArray
         workingLineArray = new Line2D.Double[4];
         numIntersections = 0;  // Hope this is correct, try and handle anyway if not. REFACTOR???
+        intersectionPoints = new ArrayList<>();
     }
 
-    
+    public synchronized void getEntityVsEntityIntersections(EntityHitbox eA, EntityHitbox eB) {
+        for(Line2D lineA : eA.workingLineArray) {
+            for(Line2D lineB : eB.workingLineArray) {
+                if(checkForIntersection(lineA, lineB)) {
+                    intersectionPoints.add(getIntersectionPoint(lineA, lineB));
+                }
+            }
+        }
+    }
     
     // Check for intersection of line segments
     /**
@@ -92,7 +104,17 @@ public class EntityHitbox {
         return lineA.intersectsLine(lineB);
     }
     
-    // Code from online source, author not known,
+    /**
+     * Align with map based on Entities x and y
+     * @param x
+     * @param y 
+     */
+    public void alignWithMap(int x, int y) {
+        xPos = x + xOffset;
+        yPos = y + yOffset;
+    }
+    
+    // Code modified from online source, author not known,
     /**
      * Returns intersection point of two Line2D.Double lines segments
      * @param lineA

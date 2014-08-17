@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -132,6 +133,13 @@ public class BackBuffer
         m_canvas.createBufferStrategy(2);
         
         m_strategy = m_canvas.getBufferStrategy();
+    }
+
+    void draw(Line2D.Double[] workingLineArray) {
+        for(Line2D line : workingLineArray) {
+            m_graphics.drawLine((int)line.getX1(), (int)line.getY1(),
+                    (int)line.getX2(), (int)line.getY2());
+        }
     }
 
 

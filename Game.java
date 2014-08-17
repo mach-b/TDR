@@ -11,7 +11,7 @@ public class Game
     private static Game sm_game = null;
     
     // Framework:
-    private BackBuffer m_backBuffer;
+    protected BackBuffer m_backBuffer;
     private SpriteStore m_spriteStore;
     
     // Simulation Counters:
