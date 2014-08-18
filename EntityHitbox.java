@@ -102,12 +102,12 @@ public class EntityHitbox {
      * @param x
      * @param y 
      */
-    public void alignWithMap(int x, int y) {
+    public void alignWithEntity(int x, int y) {
         entityX = x;
         entityY = y;
         xPos = x + xOffset;
         yPos = y + yOffset;
-        
+        System.out.println("xPos="+(xPos)+", yPos="+(yPos));
     }
     
     // Code modified from online source, author not known,

@@ -4,6 +4,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Transparency;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -60,7 +61,7 @@ public class Sprite
         b.drawImage(x, y, m_image);
     }
     
-    public void draw(BackBuffer b, int x, int y, float f, Point p)
+    public void draw(BackBuffer b, int x, int y, float f, Point2D.Double p)
     {
         b.drawRotatedImage(x, y, m_image, f, p);
     }

@@ -83,12 +83,12 @@ public class Game
         m_drawDebugInfo = true;
         // Create player vehicle
 //        playerVehicle = new VehicleVeryBadATM(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400);
-          playerVehicle = new Vehicle(m_spriteStore.getSprite("assets/BMW_55x114.png"), 300, 400);
+          playerVehicle = new Vehicle(m_spriteStore.getSprite("assets/BMW_55x114.png"), 1200, 3000);
 //        testVehicleA = new Vehicle(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400);
         
         // Create track
         track = new Track(m_spriteStore.getSprite("assets/LoopTrack.jpg"), 0, 0);
-        
+        track.initialiseBitmap("assets/LoopBitmap.jpg");
         
         //populateEnemyContainer();
         
@@ -149,7 +149,7 @@ public class Game
         
         // Prepare to draw a new frame:
         m_backBuffer.clear();
-        //m_backBuffer.camera.shiftCamera(playerVehicle, m_backBuffer);
+        m_backBuffer.camera.shiftCamera(playerVehicle, m_backBuffer);
         //camera.clear();
         drawTrack();
         drawPlayerVehicle();
@@ -163,12 +163,6 @@ public class Game
             m_backBuffer.drawText(10, 75, "Acceleration: " + playerVehicle.acceleration);
             m_backBuffer.drawText(10, 90, "X Position: " + playerVehicle.m_positionX);
             m_backBuffer.drawText(10, 105, "Y Position: " + playerVehicle.m_positionY);
-//            camera.drawText(10, 30, "FPS: " + String.valueOf(m_FPS));
-//            camera.drawText(10, 45, "Rotation: " +Math.toDegrees(playerVehicle.m_rotationAngle)+" degrees");
-//            camera.drawText(10, 60, "Velocity: " + playerVehicle.speed);
-//            camera.drawText(10, 75, "Acceleration: " + playerVehicle.acceleration);
-//            camera.drawText(10, 90, "X Position: " + playerVehicle.m_positionX);
-//            camera.drawText(10, 105, "Y Position: " + playerVehicle.m_positionY);
         }
         // Flip frame buffers:
         m_backBuffer.present();

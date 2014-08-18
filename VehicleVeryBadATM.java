@@ -124,7 +124,7 @@ public class VehicleVeryBadATM extends Entity {
                 m_rotationAngle -= Math.PI*2;
             }
             m_EntitySprite.draw(b, (int) m_positionX, (int) m_positionY, m_rotationAngle, //m_rotationAngle (float) (Math.PI/2)
-                    new Point((int) m_positionX + m_EntitySprite.getWidth()/2, 
+                    new Point2D.Double((int) m_positionX + m_EntitySprite.getWidth()/2, 
                             (int) m_positionY + m_EntitySprite.getHeight()/2));
         }
     }

@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -81,9 +82,9 @@ public class BackBuffer
                              frameX, frameY, frameX + w, frameY + h, null);
     }
     
-    public void drawRotatedImage(int x, int y, Image i, float angle, Point point) {
+    public void drawRotatedImage(int x, int y, Image i, float angle, Point2D.Double point) {
 
-        System.out.println("rotImage x="+x+", y="+y);
+        System.out.println("### Drawing Vehicle Sprite x="+x+", y="+y);
         transformer = new AffineTransform();
         transformer.rotate(angle, point.getX(), point.getY());
         m_graphics.transform(transformer);
@@ -138,18 +139,29 @@ public class BackBuffer
         }
     }
 
-    void draw(EntityHitbox entityHitbox) {
+    public synchronized void draw(EntityHitbox entityHitbox) {
         m_graphics.setColor(Color.PINK);
         m_graphics.drawRect(entityHitbox.entityX, entityHitbox.entityY, 5, 5);
         m_graphics.setColor(Color.red);
+        System.out.println("*** EHB location: x="+ entityHitbox.xPos+", y="+entityHitbox.yPos);
         for(Line2D line : entityHitbox.workingLineArray) {
             m_graphics.drawLine((int)(line.getX1()+entityHitbox.xPos), (int)(line.getY1()+entityHitbox.yPos),
                     (int)(line.getX2()+entityHitbox.xPos), (int)(line.getY2()+entityHitbox.yPos));
             m_graphics.setColor(Color.blue);
-            System.out.println("Line point x="+(line.getX1()+entityHitbox.xPos)+", y"+(line.getY1()+entityHitbox.yPos));
         }
     }
 
+//    void draw(EntityHitbox entityHitbox) {
+//        m_graphics.setColor(Color.PINK);
+//        m_graphics.drawRect(entityHitbox.entityX, entityHitbox.entityY, 5, 5);
+//        m_graphics.setColor(Color.red);
+//        for(Line2D line : entityHitbox.workingLineArray) {
+//            m_graphics.drawLine((int)(line.getX1()+entityHitbox.xPos), (int)(line.getY1()+entityHitbox.yPos),
+//                    (int)(line.getX2()+entityHitbox.xPos), (int)(line.getY2()+entityHitbox.yPos));
+//            m_graphics.setColor(Color.blue);
+//            System.out.println("Line point x="+(line.getX1()+entityHitbox.xPos)+", y"+(line.getY1()+entityHitbox.yPos));
+//        }
+//    }
     
         //ROTATION???
 //      Graphics2D g2d = ...

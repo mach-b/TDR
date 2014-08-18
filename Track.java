@@ -25,6 +25,10 @@ class Track extends Entity {
         // Create Bitmap, scaled to represent each pixel '1'.
         bitmap = new Bitmap(bitmapURL);
     }
+    
+    public void initialiseBitmap(String s) {
+        bitmap = new Bitmap(s);
+    }
 
     @Override
     public void collidedWith(Entity e) {

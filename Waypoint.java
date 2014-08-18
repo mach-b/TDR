@@ -6,11 +6,13 @@
 
 package topdownracer;
 
+import java.awt.geom.Point2D;
+
 /**
  *
  * @author markburton
  */
-public class Waypoint extends Point {
+public class Waypoint extends Point2D.Double {
     
     protected float radius;
 

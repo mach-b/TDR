@@ -34,9 +34,9 @@ public class Vehicle extends Entity {
         this.rotationRadians = 0;
         this.speed = 0;
         this.acceleration = 0;
-        this.accelerationIncrement = 2;
-        this.maxAcceleration = 8;
-        this.maxSpeed = 30;
+        this.accelerationIncrement = 1;
+        this.maxAcceleration = 5;
+        this.maxSpeed = 25;
         this.rotationPoint = new Point2D.Double(sprite.getWidth()/2, sprite.getHeight()/2);
         // TEMP FIX
         this.collisionRectangle = new Rectangle(8, 8, 38, 99);
@@ -49,7 +49,7 @@ public class Vehicle extends Entity {
         this.turnState = TurnState.NOT_TURNING;
         currentPosition = new Point2D.Double(x, y);
         previousPosition = currentPosition;
-        entityHitbox.alignWithMap((int)currentPosition.getX(), (int)currentPosition.getY());
+        entityHitbox.alignWithEntity((int)currentPosition.getX(), (int)currentPosition.getY());
         
     }
     
@@ -61,7 +61,7 @@ public class Vehicle extends Entity {
         this.acceleration = 0;
         this.accelerationIncrement = 2;
         this.maxAcceleration = 10;
-        this.maxSpeed = 100;
+        this.maxSpeed = 40;
         this.rotationPoint = new Point2D.Double(sprite.getWidth()/2, sprite.getHeight()/2);
         this.collisionRectangle = rectangle;
         // TEMP FIX
@@ -75,7 +75,7 @@ public class Vehicle extends Entity {
         this.turnState = TurnState.NOT_TURNING;
         currentPosition = new Point2D.Double(x, y);
         previousPosition = currentPosition;
-        entityHitbox.alignWithMap((int)currentPosition.getX(), (int)currentPosition.getY());
+        entityHitbox.alignWithEntity((int)currentPosition.getX(), (int)currentPosition.getY());
 
     }
     
@@ -138,7 +138,7 @@ public class Vehicle extends Entity {
 
     private void brake(float dt) {
         if(speed != 0) {
-            speed -= (speed * 0.7)*dt;
+            speed -= (speed * 0.8)*dt;
         }
     }
 
@@ -150,19 +150,21 @@ public class Vehicle extends Entity {
     }
 
     private void coast(float dt) {
-        speed = speed * 0.9;
+        if(speed > 0) {
+            speed -= (speed * 0.3)*dt;
+        }
         
     }
 
     private void steerLeft(float dt) {
-        rotationRadians -= ((Math.PI)/12)*dt;
+        rotationRadians -= ((Math.PI)/2)*dt;
         if(rotationRadians < 0.0) {
             rotationRadians += (Math.PI*2);
         }
     }
 
     private void steerRight(float dt) {
-        rotationRadians += ((Math.PI)/12)*dt;
+        rotationRadians += ((Math.PI)/2)*dt;
         if(rotationRadians > (Math.PI*2)) {
             rotationRadians -= (Math.PI*2);
         }
@@ -179,10 +181,10 @@ public class Vehicle extends Entity {
         if(speed != 0) {
             movementVector = Game.getInstance().vCalc.rotateVector(movementVector, rotationRadians);
         }
-// ????????????????
         currentPosition.setLocation(currentPosition.getX()-movementVector.x,
                 currentPosition.getY()-movementVector.y);
-        entityHitbox.alignWithMap((int)currentPosition.getX(), (int)currentPosition.getY());
+        System.out.println("CurrentX="+currentPosition.getX()+", CurrentY="+currentPosition.getY());
+        entityHitbox.alignWithEntity((int)currentPosition.getX(), (int)currentPosition.getY());
         entityHitbox.setWorkingLinesRotation(rotationRadians);
     }
     
@@ -194,7 +196,7 @@ public class Vehicle extends Entity {
                 m_rotationAngle -= Math.PI*2;
             }
             m_EntitySprite.draw(b, (int) currentPosition.getX(), (int) currentPosition.getY(), (float)rotationRadians, //m_rotationAngle (float) (Math.PI/2)
-                    new Point((int) currentPosition.getX() + m_EntitySprite.getWidth()/2, 
+                    new Point2D.Double((int) currentPosition.getX() + m_EntitySprite.getWidth()/2, 
                             (int) currentPosition.getY() + m_EntitySprite.getHeight()/2));
         }
         
@@ -202,7 +204,6 @@ public class Vehicle extends Entity {
             Game.getInstance().m_backBuffer.draw(entityHitbox);
         }
     }
-
     
     private void setUpCamera() {
         Game.getInstance().m_backBuffer.camera.setX(rotationPoint.getX()
@@ -210,6 +211,5 @@ public class Vehicle extends Entity {
         Game.getInstance().m_backBuffer.camera.setY(rotationPoint.getY()
             -(Game.getInstance().m_backBuffer.m_windowHeight/2));
     }
-    
     
 }

@@ -39,11 +39,10 @@ public class Camera {
     }
     
     public void shiftCamera(Vehicle vehicle, BackBuffer bB) {
-        this.x = (vehicle.currentPosition.getX() + vehicle.rotationPoint.getX()) - (bB.m_windowWidth/2);
-        this.y = (vehicle.currentPosition.getY() +vehicle.rotationPoint.getY()) - (bB.m_windowHeight/2);
-        // CAUSES PROBLEMS
-        //bB.m_graphics.translate(x, y);
-        System.out.println("translated x="+x+", y"+y);
+        x = -((vehicle.currentPosition.getX() + vehicle.rotationPoint.getX()) - (bB.m_windowWidth/2));
+        y = -((vehicle.currentPosition.getY() +vehicle.rotationPoint.getY()) - (bB.m_windowHeight/2));
+        bB.m_graphics.translate(x, y);
+        
     }
     
 }

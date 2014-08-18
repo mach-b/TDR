@@ -6,6 +6,7 @@
 package topdownracer;
 
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -58,8 +59,8 @@ public class Bitmap extends BitSet {
      * @param p a point in 2d space
      * @return boolean
      */
-    public boolean getBit(Point p) {
-        return get(x * (p.y - 1) + p.y);
+    public boolean getBit(Point2D.Double p) {
+        return get((int) (x * (p.y - 1) + p.y));
     }
 
     /**
