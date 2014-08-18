@@ -26,8 +26,8 @@ class Track extends Entity {
         bitmap = new Bitmap(bitmapURL);
     }
     
-    public void initialiseBitmap(String s) {
-        bitmap = new Bitmap(s);
+    public void initialiseBitmap(Sprite sprite) {
+        bitmap = new Bitmap(sprite);
     }
 
     @Override

@@ -31,7 +31,8 @@ public class EntityHitbox {
     protected final Line2D.Double frontLine, rightLine, backLine, leftLine;
     // workingLineArray to maintain integrity of lines over time.
     protected Line2D.Double[] workingLineArray;
-    protected Point2D rectangleOrigin, rotationPoint;
+    protected Point2D.Double rectangleOrigin, rotationPoint;
+    protected Point2D.Double[] workingPointArray;
     protected Rectangle rectangle;
     protected double currentRotationRadians;
     protected int numIntersections;
@@ -51,11 +52,11 @@ public class EntityHitbox {
         // The EntityHitbox game coordinates relative to the Entity
         this.xOffset = -((boundingDimension - entityWidth) / 2);
         this.yOffset = -((boundingDimension - entityHeight) / 2);
-        this.rectangleOrigin = rectangleOrigin;
+        this.rectangleOrigin = (Point2D.Double) rectangleOrigin;
         // Translate rectangleOrigin to context of EntityHitbox (previously relative to Entity)
         this.rectangleOrigin.setLocation(-xOffset + rectangleOrigin.getX(),
                 -yOffset + rectangleOrigin.getY());
-        this.rotationPoint = rotationPoint;
+        this.rotationPoint = (Point2D.Double) rotationPoint;
         this.rotationPoint.setLocation(rotationPoint.getX()+(-xOffset), rotationPoint.getY()+(-yOffset));
         // Create Line Segments, actual collision area bounds. (CARE makes assumtions about Rectangle, e.g. not rotated)
         this.frontLine = new Line2D.Double(rectangleOrigin,
@@ -70,6 +71,7 @@ public class EntityHitbox {
         this.leftLine = new Line2D.Double(new Point2D.Double(rectangleOrigin.getX(), rectangleOrigin.getY() + rectangle.height),
                 rectangleOrigin);
         // Set up workingLineArray
+        workingPointArray = new Point2D.Double[4];
         workingLineArray = new Line2D.Double[4];
         setWorkingLinesRotation(currentRotationRadians);
         numIntersections = 0;  // Hope this is correct, try and handle anyway if not. REFACTOR???
@@ -152,6 +154,12 @@ public class EntityHitbox {
         workingLineArray[1] = getRotatedLine(rightLine, theta);
         workingLineArray[2] = getRotatedLine(backLine, theta);
         workingLineArray[3] = getRotatedLine(leftLine, theta);
+        // Set Points
+        workingPointArray[0] = (Point2D.Double) workingLineArray[0].getP1();
+        workingPointArray[1] = (Point2D.Double) workingLineArray[1].getP1();
+        workingPointArray[2] = (Point2D.Double) workingLineArray[2].getP1();
+        workingPointArray[3] = (Point2D.Double) workingLineArray[3].getP1();
+        alignPointsToMap();
     }
     
     /**
@@ -230,4 +238,12 @@ public class EntityHitbox {
 //    rotation.rotate(angleInRadians, pivot.getX(), pivot.getY());
 //    rotation.transform(point, result);
 //    return result;    
+
+    private void alignPointsToMap() {
+        
+        for(int i = 0; i < 4; i++) {
+            workingPointArray[i].x = workingPointArray[i].x + xPos;
+            workingPointArray[i].y = workingPointArray[i].y + yPos;
+        }
+    }
 }

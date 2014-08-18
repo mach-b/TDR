@@ -41,7 +41,7 @@ public class Game
 //    private VehicleVeryBadATM playerVehicle;
     private Vehicle testVehicleA, testVehicleB, playerVehicle;
     private ArrayList<VehicleVeryBadATM> opponentContainer;
-    private Track track;
+    protected Track track;
     
     // Back particle emitter
     //private ParticleEmitter m_smallStarEmitter;
@@ -88,7 +88,7 @@ public class Game
         
         // Create track
         track = new Track(m_spriteStore.getSprite("assets/LoopTrack.jpg"), 0, 0);
-        track.initialiseBitmap("assets/LoopBitmap.jpg");
+        track.initialiseBitmap(new Sprite("assets/LoopBitmap.jpg"));
         
         //populateEnemyContainer();
         
@@ -158,8 +158,8 @@ public class Game
         if (m_drawDebugInfo)
         {
             m_backBuffer.drawText(10, 30, "FPS: " + String.valueOf(m_FPS));
-            m_backBuffer.drawText(10, 45, "Rotation: " +Math.toDegrees(playerVehicle.m_rotationAngle)+" degrees");
-            m_backBuffer.drawText(10, 60, "Velocity: " + playerVehicle.speed);
+            m_backBuffer.drawText(10, 45, "Rotation: " +Math.toDegrees(playerVehicle.rotationRadians)+" degrees");
+            m_backBuffer.drawText(10, 60, "Speed: " + playerVehicle.speed);
             m_backBuffer.drawText(10, 75, "Acceleration: " + playerVehicle.acceleration);
             m_backBuffer.drawText(10, 90, "X Position: " + playerVehicle.m_positionX);
             m_backBuffer.drawText(10, 105, "Y Position: " + playerVehicle.m_positionY);
