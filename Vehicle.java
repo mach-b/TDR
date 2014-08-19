@@ -27,6 +27,7 @@ public class Vehicle extends Entity {
     protected MomentumState momentumState;
     protected Vector2d movementVector;
     protected boolean drawLines;
+    private double previousRotation;
 
     public Vehicle(Sprite sprite, int x, int y) {
         super(sprite, x, y);
@@ -36,7 +37,7 @@ public class Vehicle extends Entity {
         this.acceleration = 0;
         this.accelerationIncrement = 1;
         this.maxAcceleration = 5;
-        this.maxSpeed = 25;
+        this.maxSpeed = 20;
         this.rotationPoint = new Point2D.Double(sprite.getWidth() / 2, sprite.getHeight() / 2);
         // TEMP FIX
         this.collisionRectangle = new Rectangle(8, 8, 38, 99);
@@ -87,7 +88,9 @@ public class Vehicle extends Entity {
     }
 
     private void moveVehicle(float dt) {
-
+        previousPosition = (Point2D) currentPosition.clone();
+        previousRotation = rotationRadians;
+        
         switch (momentumState) {
             case ACCELERATING:
                 accelerate(dt);
@@ -136,6 +139,7 @@ public class Vehicle extends Entity {
     }
 
     private void brake(float dt) {
+        acceleration = 0;
         if (speed != 0) {
             speed -= (speed * 0.8) * dt;
         }
@@ -155,6 +159,7 @@ public class Vehicle extends Entity {
     }
 
     private void coast(float dt) {
+        acceleration = 0;
         if (speed > 0) {
             speed -= (speed * 0.3) * dt;
         }
@@ -184,7 +189,7 @@ public class Vehicle extends Entity {
     }
 
     private void updatePosition() {
-        previousPosition = (Point2D) currentPosition.clone();
+        //previousPosition = (Point2D) currentPosition.clone();
         movementVector = new Vector2d(0, speed);
         // Check this method may be problem with Vehicle class too !!!!!!!!
         if (speed != 0) {
@@ -200,6 +205,14 @@ public class Vehicle extends Entity {
         if (!onTrack()) {
             System.out.println("Off Track!");
             currentPosition = previousPosition;
+            
+            rotationRadians = previousRotation;
+            
+            speed = 0;
+            bounce(movementVector);
+            if(!onTrack()) {
+                currentPosition = previousPosition;
+            }
         }
     }
 
@@ -245,6 +258,16 @@ public class Vehicle extends Entity {
         return true;
     }
 
+    public void bounce(Vector2d v) {
+        // Rotate invalid movement by PI Radians
+        movementVector = Game.getInstance().vCalc.rotateVector(v, Math.PI);
+        // Bounce player back a proportion of rotated Vector
+        currentPosition.setLocation(currentPosition.getX() - movementVector.x*0.2,
+                currentPosition.getY() - movementVector.y*0.2);
+        // Set Hitbox
+        entityHitbox.alignWithEntity((int) currentPosition.getX(), (int) currentPosition.getY());
+        entityHitbox.setWorkingLinesRotation(rotationRadians);
+    }
 //    private boolean onTrack() {
 //        for(int i = 0; i<4; i++) {
 //            //if(Game.getInstance().track.bitmap.getBit(entityHitbox.workingPointArray[i])==false) {
