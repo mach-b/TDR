@@ -1,10 +1,7 @@
 package topdownracer;
 
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-import java.util.ArrayDeque;
+import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Game 
 {
@@ -14,6 +11,9 @@ public class Game
     // Framework:
     protected BackBuffer m_backBuffer;
     private SpriteStore m_spriteStore;
+    private FontStore fontStore;
+    protected CheckpointHandler checkpointHandler;
+    protected WaypointHandler waypointHandler;
     
     // Simulation Counters:
     private float m_elapsedSeconds;
@@ -25,22 +25,12 @@ public class Game
     private KeyInputHandler keyInputHandler;
     protected GameLogger gamelogger;
     protected VectorCalculator vCalc;
-    
+    protected Font boldItalic;
+    protected AIVehicle aiV;
     // Game Entities...
-    
-    // Ex003.2: Add a PlayerShip field.  
-    //private PlayerShip playerShip;
-    // Ex003.3: Add an alien enemy container field.
-    //private Enemy[][] enemyContainer;
-    //private ArrayList<Enemy> enemyContainer;
-    // Ex003.4: Add a bullet container field.
-    //private ArrayList<Bullet> bulletContainer;
-    // Ex003.5: Add an explosion container field.
-    //private ArrayList<Explosion> explosionContainer;
-    
-//    private VehicleVeryBadATM playerVehicle;
+
     private Vehicle testVehicleA, testVehicleB, playerVehicle;
-    private ArrayList<VehicleVeryBadATM> opponentContainer;
+    private ArrayList<AIVehicle> opponentContainer;
     protected Track track;
     
     // Back particle emitter
@@ -67,7 +57,10 @@ public class Game
         m_frameCount = 0;
         m_FPS = 0;
         m_numUpdates = 0;
-    
+        
+        //checkpointHandler = new CheckpointHandler();
+        waypointHandler = new WaypointHandler();
+        
         // Setup game framework.
         m_backBuffer = new BackBuffer();
         m_spriteStore = new SpriteStore();
@@ -79,6 +72,10 @@ public class Game
         keyInputHandler = new KeyInputHandler();
         vCalc = new VectorCalculator();
 
+        opponentContainer = new ArrayList<>();
+        aiV = new AIVehicle(m_spriteStore.getSprite("assets/BMW_55x114.png"), 1000, 3000);
+        System.out.println("AIVehicle created");
+        opponentContainer.add(aiV);
         
         m_drawDebugInfo = true;
         // Create player vehicle
@@ -90,8 +87,7 @@ public class Game
         track = new Track(m_spriteStore.getSprite("assets/LoopTrack.jpg"), 0, 0);
         track.initialiseBitmap(new Sprite("assets/LoopBitmap.jpg"));
         
-        //populateEnemyContainer();
-        
+
     }
     
     public void gameLoop()
@@ -138,7 +134,10 @@ public class Game
         }
         if(deltaTime > 0) {
             playerVehicle.process(deltaTime);
-            
+            System.out.println("OpponentContainerSize="+opponentContainer.size());
+            opponentContainer.stream().forEach((ai) -> {
+                ai.process(deltaTime);
+            });
         }
        
     }
@@ -153,6 +152,7 @@ public class Game
         //camera.clear();
         drawTrack();
         drawPlayerVehicle();
+        drawAIPlayers();
         
         //Draw Test Text:
         if (m_drawDebugInfo)
@@ -163,6 +163,10 @@ public class Game
             m_backBuffer.drawText(10, 75, "Acceleration: " + playerVehicle.acceleration);
             m_backBuffer.drawText(10, 90, "X Position: " + playerVehicle.m_positionX);
             m_backBuffer.drawText(10, 105, "Y Position: " + playerVehicle.m_positionY);
+            
+//            m_backBuffer.m_graphics.setFont(boldItalic);
+//            m_backBuffer.m_graphics.setColor(Color.red);
+//            m_backBuffer.drawText(100, 200, "TESTING");
         }
         // Flip frame buffers:
         m_backBuffer.present();
@@ -218,6 +222,12 @@ public class Game
     
     private synchronized void drawPlayerVehicle() {
         playerVehicle.draw(m_backBuffer);
+    }
+
+    private void drawAIPlayers() {
+        opponentContainer.stream().forEach((ai) -> {
+            ai.draw(m_backBuffer);
+        });
     }
 }
 

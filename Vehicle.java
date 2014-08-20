@@ -17,7 +17,7 @@ import javax.vecmath.Vector2d;
 public class Vehicle extends Entity {
 
     protected EntityHitbox entityHitbox;
-    protected Point2D rotationPoint;
+    protected Point2D.Double rotationPoint;
     protected Rectangle collisionRectangle;
     protected double rotationRadians, speed, acceleration,
             accelerationIncrement, turnIncrement, maxAcceleration, maxSpeed;
@@ -132,7 +132,7 @@ public class Vehicle extends Entity {
         if (acceleration > maxAcceleration) {
             acceleration = maxAcceleration;
         }
-        speed += acceleration;
+        speed += acceleration*dt; // ****************** ?????????????????????
         if (speed > maxSpeed) {
             speed = maxSpeed;
         }
@@ -188,7 +188,7 @@ public class Vehicle extends Entity {
         // Nothing to do
     }
 
-    private void updatePosition() {
+    public void updatePosition() {
         //previousPosition = (Point2D) currentPosition.clone();
         movementVector = new Vector2d(0, speed);
         // Check this method may be problem with Vehicle class too !!!!!!!!

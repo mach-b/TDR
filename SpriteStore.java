@@ -1,5 +1,6 @@
 package topdownracer;
 
+import java.awt.FontFormatException;
 import java.util.HashMap;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
@@ -23,7 +24,7 @@ public class SpriteStore
         // TODO: Log State Change: "SpriteStore Created"
     }
     
-    public Sprite getSprite(String filename)
+    public Sprite getSprite(String filename) 
     {
         Sprite toReturn = null;
 

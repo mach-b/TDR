@@ -14,11 +14,10 @@ import java.awt.geom.Point2D;
  */
 public class Waypoint extends Point2D.Double {
     
-    protected float radius;
+    
 
-    public Waypoint(int x, int y, float radius) {
+    public Waypoint(double x, double y) {
         super(x, y);
-        this.radius = radius;
     }
     
 }
