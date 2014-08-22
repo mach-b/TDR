@@ -21,9 +21,26 @@ public class ExplosionEmitter {
     public ExplosionEmitter(String filename) {
         explosions = new ArrayList<>();
         aSprite = new AnimatedSprite(filename);
+        
     }
     
-    public void spawnExplosion(int x, int y) {
-        explosions.add(new Explosion(x, y));
+    public synchronized void spawnExplosion(int x, int y) {
+        explosions.add(new Explosion(x, y, aSprite));
+    }
+    
+    public synchronized void process(float dt) {
+        for(Explosion e : explosions) {
+            e.aSprite.process(dt);
+            if(e.aSprite.isAnimating()==false) {
+                explosions.remove(e);
+            }
+        }
+        
+    }
+    
+    public synchronized void drawExplosions(BackBuffer b) {
+        for (Explosion e : explosions) {
+            aSprite.draw(b, e.x, e.y);
+        }
     }
 }

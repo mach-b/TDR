@@ -21,7 +21,7 @@ public class AnimatedSprite extends Sprite
         super(filename);
         
         m_frameWidth = 50;
-        m_frameSpeed = 0.07f;
+        m_frameSpeed = 0.2f;
         
         m_loop = false;
         m_paused = false;
@@ -68,8 +68,10 @@ public class AnimatedSprite extends Sprite
     public void draw(BackBuffer b, int x, int y)
     {
         // Ex003.5: Draw the particular frame into the backbuffer.
+        if(m_animating) {
         b.drawSpriteFrame(x, y, coordinatesContainer[m_currentFrame], 0,
                 m_frameWidth, m_frameWidth, m_image);
+        }
         //          What is the current frame's x coordinate?
         //          What is the frame width?
         //          See BackBuffer's DrawSpriteFrame method.

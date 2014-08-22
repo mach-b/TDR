@@ -42,7 +42,9 @@ public class Game
     private ArrayList<AIVehicle> opponentContainer;
     protected Track track;
     
-    protected AnimatedSprite explosion;
+    
+    
+    protected ExplosionEmitter explosionEmmiter;
     
     // Back particle emitter
     //private ParticleEmitter m_smallStarEmitter;
@@ -82,8 +84,7 @@ public class Game
         hud = new HeadsUpDisplay();
         populateHUD();
 
-        explosion = new AnimatedSprite("assets/Explosion.png"); //(AnimatedSprite) m_spriteStore.getSprite("assets/Explosion.png");
-        
+        explosionEmmiter = new ExplosionEmitter("assets/Explosion.png");
         keyInputHandler = new KeyInputHandler();
         vCalc = new VectorCalculator();
 
@@ -170,6 +171,7 @@ public class Game
             opponentContainer.stream().forEach((ai) -> {
                 ai.process(deltaTime);
             });
+            explosionEmmiter.process(deltaTime);
         }
        
     }
@@ -183,9 +185,11 @@ public class Game
         //m_backBuffer.camera.shiftCamera(opponentContainer.get(0), m_backBuffer);
         m_backBuffer.camera.shiftCamera(playerVehicle, m_backBuffer);
         drawTrack();
+        explosionEmmiter.drawExplosions(m_backBuffer);
         drawPlayerVehicle();
         drawAIPlayers();
         drawHUD();
+        
         //Draw Test Text:
         if (m_drawDebugInfo)
         {
@@ -293,11 +297,8 @@ public class Game
     }
     
     public void spawnExplosion(int x, int y) {
-        if(explosion!=null)
-        explosion.draw(m_backBuffer, x, y);
-        System.out.println("####### EXPLOSION #######");
-        System.out.println("####### EXPLOSION #######");
-        System.out.println("####### EXPLOSION #######");
+        if(explosionEmmiter!=null)
+        explosionEmmiter.spawnExplosion(x, y);
     }
     
 }

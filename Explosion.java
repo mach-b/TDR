@@ -13,9 +13,15 @@ package topdownracer;
 class Explosion {
     
     protected int x, y;
+    protected AnimatedSprite aSprite;
     
-    public Explosion(int x, int y) {
+    public Explosion(int x, int y, AnimatedSprite aSprite) {
         this.x = x;
         this.y = y;
+        this.aSprite = aSprite;
+    }
+    
+    public void process(float dt) {
+        aSprite.process(dt);
     }
 }

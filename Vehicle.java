@@ -81,7 +81,7 @@ public class Vehicle extends Entity {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             //clip.setFramePosition(0);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-20.0f);
+            gainControl.setValue(-30.0f);
             clip.start();
         }
     }
@@ -148,9 +148,9 @@ public class Vehicle extends Entity {
         }
         speed += acceleration * dt; // ****************** ?????????????????????
         if (speed > maxSpeed) {
-            //if(!speedMax) {
+            if(!speedMax) {
                 spawnExplosion();
-            //}
+            }
             speed = maxSpeed;
           
         }
