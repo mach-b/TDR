@@ -16,6 +16,7 @@ public abstract class Entity
     protected Vector2d accelerationVector;
     protected Vector2d rotationVector;
     protected Vector2d brakeVector;
+    protected EntityHitbox entityHitbox;
     
     protected float maxVelocity, maxVelocityReverse;
     
@@ -39,29 +40,11 @@ public abstract class Entity
         m_dead = false;
     }
     
-    
-
-    
-//    public static void KillOrthogonalVelocity(Car car, float drift = 0f)
-//{
-//    Vector2 forwardVelocity = car.Forward * Vector2.Dot(car.Velocity, car.Forward);
-//    Vector2 rightVelocity = car.Right * Vector2.Dot(car.Velocity, car.Right);
-//    car.Velocity = forwardVelocity + rightVelocity * drift;
-//}
+   
     
     public void process(float deltatime)
     {
-        // Ex003.2: Generic position update, based upon velocityVector (and time).
-        if  (deltatime>0) {
-            m_positionX = m_positionX+(m_velocityX*deltatime);
-            m_positionY = m_positionY+(m_velocityY*deltatime);
-        }
-        // Ex003.2: Boundary checking and position capping.   
-        m_positionX = (m_positionX < 0 ? 0 : m_positionX);
-        m_positionX = (m_positionX+m_EntitySprite.getWidth() > 999 ? (999-m_EntitySprite.getWidth()) : m_positionX);
-        m_positionY = (m_positionY < 0 ? 0 : m_positionY);
-        m_positionY = (m_positionY+m_EntitySprite.getHeight() > 699 ? (699-m_EntitySprite.getHeight()) : m_positionY);
-        
+         
     }
     
     public void draw(BackBuffer b)
@@ -114,22 +97,24 @@ public abstract class Entity
     
     public boolean isCollidingWith(Entity e)
     {
-        // Ex003.4: Generic Entity Collision routine.
-        
-        // Ex003.4: Does this object collide with the e object?
-        // Ex003.4: Creat a Java Rectangle for each entity (this and e).
-        Rectangle thisBounds = new Rectangle((int)m_positionX, (int)m_positionY, 
-                m_EntitySprite.getWidth(), m_EntitySprite.getHeight());
-        Rectangle eBounds = new Rectangle((int)e.m_positionX, (int)e.m_positionY, 
-                e.m_EntitySprite.getWidth(), e.m_EntitySprite.getHeight());
-        // Ex003.4: Set bounds for each entity.
 
-        // Ex003.4: Call intersects method.
-        if (thisBounds.intersects(eBounds)) {
-            return true;
-        }
-        // Ex003.4: Return result of collision.
-        return (false); // TODO: Change return value!
+//        // Ex003.4: Generic Entity Collision routine.
+//        
+//        // Ex003.4: Does this object collide with the e object?
+//        // Ex003.4: Creat a Java Rectangle for each entity (this and e).
+//        Rectangle thisBounds = new Rectangle((int)m_positionX, (int)m_positionY, 
+//                m_EntitySprite.getWidth(), m_EntitySprite.getHeight());
+//        Rectangle eBounds = new Rectangle((int)e.m_positionX, (int)e.m_positionY, 
+//                e.m_EntitySprite.getWidth(), e.m_EntitySprite.getHeight());
+//        // Ex003.4: Set bounds for each entity.
+//
+//        // Ex003.4: Call intersects method.
+//        if (thisBounds.intersects(eBounds)) {
+//            return true;
+//        }
+//        // Ex003.4: Return result of collision.
+//        return (false); // TODO: Change return value
+        return false;
     }
     
     public abstract void collidedWith(Entity e);

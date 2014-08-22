@@ -41,7 +41,7 @@ public class Camera {
     public void shiftCamera(Vehicle vehicle, BackBuffer bB) {
         x = -((vehicle.currentPosition.getX() + vehicle.rotationPoint.getX()) - (bB.m_windowWidth/2));
         y = -((vehicle.currentPosition.getY() +vehicle.rotationPoint.getY()) - (bB.m_windowHeight/2));
-        bB.m_graphics.translate(x, y);
+        //bB.m_graphics.translate(x, y); * CANCEL THIS, WAS CAUSING PROBLEMS DRAWING THINGS OTHER THAN PLAYER
         
     }
     

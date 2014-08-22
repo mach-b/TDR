@@ -28,8 +28,8 @@ public class VectorCalculator {
 //        double y = (vect[0]*rotMatrix[2])+(vect[1]*rotMatrix[3]);
         double x = (v.x * Math.cos(theta)) - (v.y * Math.sin(theta));
         double y = (v.x * Math.sin(theta)) + (v.y * Math.cos(theta));
-        GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Rotating by "
-                + Math.toDegrees(theta)+"degrees.");
+//        GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Rotating by "
+//                + Math.toDegrees(theta)+"degrees.");
         return new Vector2d(x, y);  // Added Negatives
     }
     

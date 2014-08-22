@@ -1,7 +1,13 @@
 package topdownracer;
 
 import java.awt.Font;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Game 
 {
@@ -10,8 +16,9 @@ public class Game
     
     // Framework:
     protected BackBuffer m_backBuffer;
-    private SpriteStore m_spriteStore;
-    private FontStore fontStore;
+    protected SpriteStore m_spriteStore;
+    //private FontStore fontStore;
+    protected ClipStore clipStore;
     protected CheckpointHandler checkpointHandler;
     protected WaypointHandler waypointHandler;
     
@@ -27,11 +34,15 @@ public class Game
     protected VectorCalculator vCalc;
     protected Font boldItalic;
     protected AIVehicle aiV;
+    protected HeadsUpDisplay hud;
+    protected boolean drawHUD = true;
     // Game Entities...
 
     private Vehicle testVehicleA, testVehicleB, playerVehicle;
     private ArrayList<AIVehicle> opponentContainer;
     protected Track track;
+    
+    protected AnimatedSprite explosion;
     
     // Back particle emitter
     //private ParticleEmitter m_smallStarEmitter;
@@ -65,28 +76,50 @@ public class Game
         m_backBuffer = new BackBuffer();
         m_spriteStore = new SpriteStore();
         m_backBuffer.initialise(1000, 700); // Frame width, height.
-        //camera = new Camera(5000, 5000, new Point2D.Double(1000, 1000));
-        //camera.initialise(1000, 700);
 
+        clipStore = new ClipStore();
+        
+        hud = new HeadsUpDisplay();
+        populateHUD();
 
+        explosion = new AnimatedSprite("assets/Explosion.png"); //(AnimatedSprite) m_spriteStore.getSprite("assets/Explosion.png");
+        
         keyInputHandler = new KeyInputHandler();
         vCalc = new VectorCalculator();
 
         opponentContainer = new ArrayList<>();
-        aiV = new AIVehicle(m_spriteStore.getSprite("assets/BMW_55x114.png"), 1000, 3000);
-        System.out.println("AIVehicle created");
+        aiV = new AIVehicle(m_spriteStore.getSprite("assets/BMW_55x114.png"), 900, 3000);
         opponentContainer.add(aiV);
         
         m_drawDebugInfo = true;
         // Create player vehicle
 //        playerVehicle = new VehicleVeryBadATM(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400);
-          playerVehicle = new Vehicle(m_spriteStore.getSprite("assets/BMW_55x114.png"), 1200, 3000);
+          playerVehicle = new Vehicle(m_spriteStore.getSprite("assets/Camaro_55x118.png"), 1200, 3000);
 //        testVehicleA = new Vehicle(m_spriteStore.getSprite("assets/BMW_small_Prototype.png"), 300, 400);
         
         // Create track
         track = new Track(m_spriteStore.getSprite("assets/LoopTrack.jpg"), 0, 0);
         track.initialiseBitmap(new Sprite("assets/LoopBitmap.jpg"));
-        
+        //setPlayerClips();
+        try {
+            playerVehicle.setClip(clipStore.getClip("assets/EngineNoise4.wav"));
+        } catch (UnsupportedAudioFileException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (LineUnavailableException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            playerVehicle.setTyreSound(clipStore.getClip("assets/TyreSound.wav"));
+        } catch (UnsupportedAudioFileException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (LineUnavailableException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        playerVehicle.playClip();
 
     }
     
@@ -134,7 +167,6 @@ public class Game
         }
         if(deltaTime > 0) {
             playerVehicle.process(deltaTime);
-            System.out.println("OpponentContainerSize="+opponentContainer.size());
             opponentContainer.stream().forEach((ai) -> {
                 ai.process(deltaTime);
             });
@@ -148,12 +180,12 @@ public class Game
         
         // Prepare to draw a new frame:
         m_backBuffer.clear();
+        //m_backBuffer.camera.shiftCamera(opponentContainer.get(0), m_backBuffer);
         m_backBuffer.camera.shiftCamera(playerVehicle, m_backBuffer);
-        //camera.clear();
         drawTrack();
         drawPlayerVehicle();
         drawAIPlayers();
-        
+        drawHUD();
         //Draw Test Text:
         if (m_drawDebugInfo)
         {
@@ -163,11 +195,10 @@ public class Game
             m_backBuffer.drawText(10, 75, "Acceleration: " + playerVehicle.acceleration);
             m_backBuffer.drawText(10, 90, "X Position: " + playerVehicle.m_positionX);
             m_backBuffer.drawText(10, 105, "Y Position: " + playerVehicle.m_positionY);
-            
-//            m_backBuffer.m_graphics.setFont(boldItalic);
-//            m_backBuffer.m_graphics.setColor(Color.red);
-//            m_backBuffer.drawText(100, 200, "TESTING");
+
         }
+        
+        
         // Flip frame buffers:
         m_backBuffer.present();
     }
@@ -229,5 +260,45 @@ public class Game
             ai.draw(m_backBuffer);
         });
     }
+
+    private void populateHUD() {
+        hud.setSpeedTextSprite(m_spriteStore.getSprite("assets/bigSpeed.png"));
+        for(int i = 0; i<10; i++) {
+            hud.addSpeedNumbersSprites(m_spriteStore.getSprite("assets/big"+i+".png"));
+        }
+    }
+
+    private void drawHUD() {
+        hud.drawSpeed((int)playerVehicle.speed, m_backBuffer);
+    }
+
+    private void setPlayerClips() {
+        try {
+            playerVehicle.setClip(clipStore.getClip("assets/EngineNoise4.wav"));
+            playerVehicle.setTyreSound(clipStore.getClip("assetes/TyreSound.wav"));
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }throw new UnsupportedOperationException("Not supported yet."); 
+        
+       
+        
+    }
+
+    public ArrayList<AIVehicle> getOpponentContainer() {
+        return opponentContainer;
+    }
+
+    public Entity getPlayer() {
+        return playerVehicle;
+    }
+    
+    public void spawnExplosion(int x, int y) {
+        if(explosion!=null)
+        explosion.draw(m_backBuffer, x, y);
+        System.out.println("####### EXPLOSION #######");
+        System.out.println("####### EXPLOSION #######");
+        System.out.println("####### EXPLOSION #######");
+    }
+    
 }
 

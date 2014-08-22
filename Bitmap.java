@@ -8,13 +8,11 @@ package topdownracer;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.BitSet;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -40,7 +38,7 @@ public class Bitmap extends BitSet {
         this.scale = 1;
         this.sprite = sprite;
         this.bufferedImage = (BufferedImage) sprite.m_image;
-        populateFromSprite();
+        //populateFromSprite();
         //outPutAsZerosandOnes();
     }
     
@@ -50,7 +48,7 @@ public class Bitmap extends BitSet {
         this.scale = scale;
         this.sprite = sprite;
         this.bufferedImage = (BufferedImage) sprite.m_image;
-        populateFromSprite();
+        //populateFromSprite();
         //outPutAsZerosandOnes();
     }
     
@@ -70,9 +68,9 @@ public class Bitmap extends BitSet {
      * @return boolean
      */
     public boolean getBit(Point2D.Double p) {
-        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-        System.out.println("Getting Point x="+p.x+ ", y="+p.y);
-        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+//        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+//        System.out.println("Getting Point x="+p.x+ ", y="+p.y);
+//        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
         return get((int) ((int)x * ((int)p.y - 1) + (int)p.y));
         
     }
@@ -100,10 +98,10 @@ public class Bitmap extends BitSet {
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println("BITMAP DONE :)");
-        System.out.println("Time to build = "+(end-start)+"ms");
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        System.out.println("BITMAP DONE :)");
+//        System.out.println("Time to build = "+(end-start)+"ms");
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
     
     /**

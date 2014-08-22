@@ -1,15 +1,6 @@
 package topdownracer;
 
-import java.awt.FontFormatException;
 import java.util.HashMap;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
-import java.net.URL;
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 
 public class SpriteStore
 {

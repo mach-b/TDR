@@ -23,7 +23,6 @@ public class VehicleVeryBadATM extends Entity {
     protected float accelerationIncrement = 10;
     protected float velocity;
     protected float accel, maxAccel, brakeValue;
-    protected SoundEffect se1, se2;
 
     // Inertia, Mass ???
     public VehicleVeryBadATM(Sprite sprite, int x, int y) {
@@ -41,8 +40,6 @@ public class VehicleVeryBadATM extends Entity {
         accel = 0;
         maxAccel = 50;
         brakeValue = 50;
-        se1 = new SoundEffect("assets/EngineNoise4.wav");
-        se1.play();
      
     }
 

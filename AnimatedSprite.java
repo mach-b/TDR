@@ -20,7 +20,7 @@ public class AnimatedSprite extends Sprite
     {
         super(filename);
         
-        m_frameWidth = 64;
+        m_frameWidth = 50;
         m_frameSpeed = 0.07f;
         
         m_loop = false;
@@ -30,7 +30,7 @@ public class AnimatedSprite extends Sprite
         startAnimating();
         
         // Ex003.5: Instantiate the frame coordinates container.
-        coordinatesContainer = new int[]{0, 64, 128, 192, 256};
+        coordinatesContainer = new int[]{0, 50, 100, 150, 200};
     }
     
     public void addFrame(int x)

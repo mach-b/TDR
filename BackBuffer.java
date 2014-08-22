@@ -73,33 +73,32 @@ public class BackBuffer
     
     public void drawImage(int x, int y, Image i)
     {
-        m_graphics.drawImage(i, x, y, null);
+        m_graphics.drawImage(i, x+((int)camera.x), y+((int)camera.y), null);
     }
     
     public void drawSpriteFrame(int x, int y, int frameX, int frameY, int w, int h, Image i)
     {
-        m_graphics.drawImage(i, x, y, x + w, y + h,
+        m_graphics.drawImage(i, x+((int)camera.x), y+((int)camera.y), x+((int)camera.x) + w, y+((int)camera.y) + h ,
                              frameX, frameY, frameX + w, frameY + h, null);
     }
     
     public void drawRotatedImage(int x, int y, Image i, float angle, Point2D.Double point) {
-
-        System.out.println("### Drawing Vehicle Sprite x="+x+", y="+y);
+        
         transformer = new AffineTransform();
-        transformer.rotate(angle, point.getX(), point.getY());
+        transformer.rotate(angle, point.getX()+((int)camera.x), point.getY()+((int)camera.y));
         m_graphics.transform(transformer);
-        m_graphics.drawImage(i, x, y, m_canvas); //
-        m_graphics.setColor(Color.red);
-        m_graphics.drawRect(x+1, y-1, 3, 3);
+        m_graphics.drawImage(i, x+((int)camera.x), y+((int)camera.y), m_canvas); //
+//        m_graphics.setColor(Color.red);
+//        m_graphics.drawRect(x+1+((int)camera.x), y-1+((int)camera.y), 3, 3);
         m_graphics = (Graphics2D) m_strategy.getDrawGraphics();
-        m_graphics.setColor(Color.blue);
-        m_graphics.drawRect(x+1, y-1, 3, 3);
+//        m_graphics.setColor(Color.blue);
+//        m_graphics.drawRect(x+1+((int)camera.x), y-1+((int)camera.y), 3, 3);
     }
     
     private void createWindow()
     {
         JFrame containerFrame = new JFrame("");
-        
+        containerFrame.setLocationRelativeTo(null);
         JPanel panel = (JPanel) containerFrame.getContentPane();
         
         panel.setPreferredSize(new Dimension(m_windowWidth, m_windowHeight));
@@ -133,20 +132,22 @@ public class BackBuffer
     void draw(Line2D.Double[] workingLineArray) {
         m_graphics.setColor(Color.red);
         for(Line2D line : workingLineArray) {
-            m_graphics.drawLine((int)line.getX1(), (int)line.getY1(),
-                    (int)line.getX2(), (int)line.getY2());
+            m_graphics.drawLine((int)line.getX1()+((int)camera.x), (int)line.getY1()+((int)camera.y),
+                    (int)line.getX2()+((int)camera.x), (int)line.getY2()+((int)camera.y));
             m_graphics.setColor(Color.blue);
         }
     }
 
     public synchronized void draw(EntityHitbox entityHitbox) {
         m_graphics.setColor(Color.PINK);
-        m_graphics.drawRect(entityHitbox.entityX, entityHitbox.entityY, 5, 5);
+        m_graphics.drawRect(entityHitbox.entityX+((int)camera.x), entityHitbox.entityY+((int)camera.y), 5, 5);
         m_graphics.setColor(Color.red);
-        System.out.println("*** EHB location: x="+ entityHitbox.xPos+", y="+entityHitbox.yPos);
+        //System.out.println("*** EHB location: x="+ entityHitbox.xPos+", y="+entityHitbox.yPos);
         for(Line2D line : entityHitbox.workingLineArray) {
-            m_graphics.drawLine((int)(line.getX1()+entityHitbox.xPos), (int)(line.getY1()+entityHitbox.yPos),
-                    (int)(line.getX2()+entityHitbox.xPos), (int)(line.getY2()+entityHitbox.yPos));
+            m_graphics.drawLine((int)(line.getX1()+entityHitbox.xPos+((int)camera.x)),
+                    (int)(line.getY1()+entityHitbox.yPos+((int)camera.y)),
+                    (int)(line.getX2()+entityHitbox.xPos+((int)camera.x)),
+                    (int)(line.getY2()+entityHitbox.yPos+((int)camera.y)));
             m_graphics.setColor(Color.blue);
         }
     }

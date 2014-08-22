@@ -6,17 +6,16 @@
 
 package topdownracer;
 
-import javax.vecmath.Vector2d;
-
 /**
  *
  * @author markburton
  */
-public class SmokeParticle extends Particle {
+class Explosion {
     
-    private int x, y, age;
-    private Vector2d direction; 
+    protected int x, y;
     
-    
-    
+    public Explosion(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }

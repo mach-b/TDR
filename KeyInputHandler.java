@@ -17,28 +17,28 @@ public class KeyInputHandler extends KeyAdapter
     {
         if (e.getKeyCode() == KeyEvent.VK_LEFT)
         {
-            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Turning Left");
+//            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Turning Left");
             turningLeft = true;
             Game.getInstance().turningLeft();
         }
         
         if (e.getKeyCode() == KeyEvent.VK_RIGHT)
         {
-            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Turning Right");
+//            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Turning Right");
             turningRight = true;
             Game.getInstance().turningRight();
         }
         
         if (e.getKeyCode() == KeyEvent.VK_A)
         {
-            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Accelerating");
+//            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Accelerating");
             accelerating = true;
             Game.getInstance().accelerate();
         }
         
         if (e.getKeyCode() == KeyEvent.VK_Q)
         {
-            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Accelerating");
+//            GameLogger.getInstance().logMessage(LogLevel.INFO, this.toString(), "Accelerating");
             reversing = true;
             Game.getInstance().reverse();
         }

@@ -31,6 +31,7 @@ public class EntityHitbox {
     protected final Line2D.Double frontLine, rightLine, backLine, leftLine;
     // workingLineArray to maintain integrity of lines over time.
     protected Line2D.Double[] workingLineArray;
+    protected Line2D.Double[] allignedWorkingLineArray;
     protected Point2D.Double rectangleOrigin, rotationPoint;
     protected Point2D.Double[] workingPointArray;
     protected Rectangle rectangle;
@@ -160,6 +161,7 @@ public class EntityHitbox {
         workingPointArray[2] = (Point2D.Double) workingLineArray[2].getP1();
         workingPointArray[3] = (Point2D.Double) workingLineArray[3].getP1();
         alignPointsToMap();
+        allignLinesToMap();
     }
     
     /**
@@ -240,10 +242,21 @@ public class EntityHitbox {
 //    return result;    
 
     private void alignPointsToMap() {
-        
         for(int i = 0; i < 4; i++) {
+            System.out.println("Line "+ i + " = "+ workingPointArray[i].toString());
             workingPointArray[i].x = workingPointArray[i].x + xPos;
             workingPointArray[i].y = workingPointArray[i].y + yPos;
+            System.out.println("Line "+ i + " = "+ workingPointArray[i].toString());
+        }
+    }
+
+    private void allignLinesToMap() {
+        for(int i = 0; i < 4; i++) {
+            if(i < workingLineArray.length-1) {
+                workingLineArray[i] = new Line2D.Double(workingPointArray[i], workingPointArray[i+1]);
+            }else {
+                workingLineArray[i] = new Line2D.Double(workingPointArray[i], workingPointArray[0]);
+            }
         }
     }
 }
