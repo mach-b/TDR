@@ -38,7 +38,7 @@ public class AnimatedSprite extends Sprite
         // Ex003.5: Add the x coordinate to the frame coordinate container.
     }
     
-    public void process(float dt)
+    public synchronized void process(float dt)
     {
         // Ex003.5: If not paused...
         if (!m_paused) {

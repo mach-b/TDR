@@ -29,10 +29,16 @@ public class ExplosionEmitter {
     }
     
     public synchronized void process(float dt) {
-        for(Explosion e : explosions) {
-            e.aSprite.process(dt);
-            if(e.aSprite.isAnimating()==false) {
-                explosions.remove(e);
+//        for(Explosion e : explosions) {
+//            e.aSprite.process(dt);
+//            if(e.aSprite.isAnimating()==false) {
+//                explosions.remove(e);
+//            }
+//        }
+        for (int i = (explosions.size()-1); i >= 0; i--) {
+            explosions.get(i).process(dt);
+            if(explosions.get(i).aSprite.isAnimating()==false) {
+                explosions.remove(i);
             }
         }
         
